@@ -1,0 +1,27 @@
+[package]
+name = "kernel-driver-rs"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+kernel-build = "0.1.0"
+kernel-log = "0.1.2"
+kernel-alloc = { version = "0.2.1", features = ["pool-tag"] }
+log = "0.4.14"
+
+[dependencies.winapi]
+git = "https://github.com/Trantect/winapi-rs.git"
+branch = "feature/km"
+default-features = false
+features = ["wdm", "ntstatus"]
+
+[profile.release]
+lto = "fat"
+debug = true
+panic = "abort"
+overflow-checks = false
+debug-assertions = false
