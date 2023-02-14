@@ -1,10 +1,6 @@
 use core::panic::PanicInfo;
 use kernel_alloc::KernelAlloc;
-
-#[link(name = "ntoskrnl")]
-extern "system" {
-    pub fn KeBugCheck(bug_check_code: u32) -> !;
-}
+use crate::nt::KeBugCheck;
 
 #[no_mangle]
 #[allow(bad_style)]

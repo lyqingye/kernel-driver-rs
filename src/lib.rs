@@ -25,7 +25,7 @@ pub extern "system" fn driver_unload(_driver: &mut DRIVER_OBJECT) {
 }
 
 #[no_mangle]
-pub extern "system" fn DriverEntry(driver: *mut DRIVER_OBJECT, _path: PVOID) -> NTSTATUS {
+pub extern "system" fn driver_entry(driver: *mut DRIVER_OBJECT, _path: PVOID) -> NTSTATUS {
     KernelLogger::init(LevelFilter::Info).unwrap();
     log::info!("Call Driver Entry");
     unsafe { (*driver).DriverUnload = Some(driver_unload) };
