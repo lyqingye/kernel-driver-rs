@@ -30,6 +30,7 @@ pub mod ctl;
 pub mod lang;
 pub mod nt;
 
+const DEVICE_NAME: &'static str = "\\Device\\WindowsKernelResearch";
 const SYMBOL_LINK: &'static str = "\\??\\WindowsKernelResearch";
 
 pub extern "system" fn dispatch_default_routine(
@@ -71,7 +72,7 @@ pub extern "system" fn driver_entry(driver: &mut DRIVER_OBJECT, _path: PVOID) ->
     driver.MajorFunction[IRP_MJ::DEVICE_CONTROL as usize] = Some(dispatch_device_contole);
 
     // create device object & symbol link
-    let device_name = unicode_string(obfstr::wide!("\\Device\\WindowsKernelResearch"));
+    let device_name = unicode_string(obfstr::wide!(DEVICE_NAME));
     let symbol_link = unicode_string(obfstr::wide!(SYMBOL_LINK));
     let mut device_object: PDEVICE_OBJECT = core::ptr::null_mut();
 
