@@ -7,6 +7,7 @@ BUILD_FLAGS = "--release"
 
 [tasks.build-driver]
 script = [
+    "cargo fmt",
     "cargo b %BUILD_FLAGS%"
 ]
 
@@ -15,6 +16,7 @@ dependencies = ["build-driver"]
 ignore_errors = true
 script = [
     "cd %TARGET_PATH%",
+    "if exist driver.sys (DEL /F driver.sys)",
     "rename kernel_driver_rs.dll driver.sys",
 ]
 

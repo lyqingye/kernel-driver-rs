@@ -12,6 +12,7 @@ kernel-build = "0.1.0"
 kernel-log = "0.1.2"
 kernel-alloc = { version = "0.2.1", features = ["pool-tag"] }
 log = "0.4.14"
+obfstr = "0.4.1"
 
 [dependencies.winapi]
 git = "https://github.com/Trantect/winapi-rs.git"
