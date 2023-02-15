@@ -99,6 +99,7 @@ dependencies = [
  "kernel-build",
  "kernel-log",
  "log",
+ "ntapi",
  "obfstr",
  "winapi 0.3.7",
 ]

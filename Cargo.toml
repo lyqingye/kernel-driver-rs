@@ -14,11 +14,16 @@ kernel-alloc = { version = "0.2.1", features = ["pool-tag"] }
 log = "0.4.14"
 obfstr = "0.4.1"
 
+
 [dependencies.winapi]
 git = "https://github.com/Trantect/winapi-rs.git"
 branch = "feature/km"
 default-features = false
-features = ["wdm", "ntstatus"]
+features = ["wdm", "ntstatus", "windef"]
+
+[dependencies.ntapi]
+version = "0.4.0"
+default-features = false
 
 [profile.release]
 lto = "fat"

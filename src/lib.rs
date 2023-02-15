@@ -23,11 +23,13 @@ use winapi::{
     },
 };
 
-use crate::ctl::dispatch_device_contole;
+use crate::control::dispatch_device_contole;
 use crate::lang::unicode_string;
+use crate::module::enum_modules;
 
-pub mod ctl;
+pub mod control;
 pub mod lang;
+pub mod module;
 pub mod nt;
 
 const DEVICE_NAME: &'static str = "\\Device\\WindowsKernelResearch";
@@ -96,6 +98,16 @@ pub extern "system" fn driver_entry(driver: &mut DRIVER_OBJECT, _path: PVOID) ->
             return status;
         }
     }
-
+    unsafe {
+        enum_modules(driver, &mut |module_info| -> bool {
+            log::info!(
+                "{} {:x} {}",
+                module_info.name,
+                module_info.base_address,
+                module_info.full_path
+            );
+            false
+        })
+    };
     STATUS_SUCCESS
 }
