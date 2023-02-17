@@ -25,7 +25,7 @@ use winapi::{
 
 use crate::control::dispatch_device_control;
 use crate::lang::unicode_string;
-use crate::module::enum_modules;
+use crate::module::{enum_modules, get_ntos_module};
 extern crate alloc;
 
 pub mod control;
@@ -108,6 +108,10 @@ pub extern "system" fn driver_entry(driver: &mut DRIVER_OBJECT, _path: PVOID) ->
         );
         false
     });
+
+    if let Some(ntos) = get_ntos_module(driver) {
+        log::info!("ntos: {:x} {}", ntos.base_address, ntos.full_path);
+    }
 
     STATUS_SUCCESS
 }

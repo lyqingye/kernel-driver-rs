@@ -10,6 +10,21 @@ pub struct ModuleInfo {
     pub base_address: usize,
     pub full_path: String,
     pub name: String,
+    pub size_of_image: usize,
+}
+
+pub fn get_ntos_module(driver: &mut DRIVER_OBJECT) -> Option<ModuleInfo> {
+    let mut result = None;
+    let ptr = MmIsAddressValid as usize;
+    enum_modules(driver, &mut |info| -> bool {
+        if ptr > info.base_address && ptr < (info.base_address + info.size_of_image) {
+            result = Some(info);
+            true
+        } else {
+            false
+        }
+    });
+    result
 }
 
 pub fn enum_modules(driver: &mut DRIVER_OBJECT, call_back: &mut dyn FnMut(ModuleInfo) -> bool) {
@@ -40,6 +55,7 @@ pub fn enum_modules(driver: &mut DRIVER_OBJECT, call_back: &mut dyn FnMut(Module
                     base_address: base,
                     full_path: full_path,
                     name: base_name,
+                    size_of_image: (*entity).SizeOfImage,
                 }) {
                     break;
                 }
