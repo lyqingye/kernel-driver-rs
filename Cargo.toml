@@ -13,7 +13,9 @@ kernel-log = "0.1.2"
 kernel-alloc = { version = "0.2.1", features = ["pool-tag"] }
 log = "0.4.14"
 obfstr = "0.4.1"
-
+# postcard = {version = "1.0.2", features = ["alloc"]}
+# serde = {version = "1.0.100", default-features = false, features = ["derive"]}
+# hashbrown = {version = "0.13.2"}
 
 [dependencies.winapi]
 git = "https://github.com/Trantect/winapi-rs.git"
@@ -21,9 +23,9 @@ branch = "feature/km"
 default-features = false
 features = ["wdm", "ntstatus", "windef"]
 
-[dependencies.ntapi]
-version = "0.4.0"
-default-features = false
+# [dependencies.ntapi]
+# version = "0.4.0"
+# default-features = false
 
 [profile.release]
 lto = "fat"

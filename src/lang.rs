@@ -1,9 +1,9 @@
-use crate::nt::KeBugCheck;
-use alloc::string::String;
+use crate::nt::{KeBugCheck, MmIsAddressValid};
+use alloc::{borrow::ToOwned, string::String};
 use core::panic::PanicInfo;
 use kernel_alloc::KernelAlloc;
 use winapi::shared::ntdef::UNICODE_STRING;
-extern crate alloc;
+
 #[no_mangle]
 #[allow(bad_style)]
 static _fltused: i32 = 0;
@@ -40,7 +40,22 @@ pub fn unicode_string(s: &[u16]) -> UNICODE_STRING {
 }
 
 #[inline]
-pub unsafe fn unicode_string_to_string(unicode: &UNICODE_STRING) -> String {
+pub unsafe fn read_unicode_string_unchecked(unicode: &UNICODE_STRING) -> String {
     let slice = core::slice::from_raw_parts(unicode.Buffer, unicode.Length as usize / 2);
     String::from_utf16_lossy(slice)
+}
+
+#[inline]
+pub fn read_unicode_string(unicode: &UNICODE_STRING, max_length: usize) -> String {
+    let result = "".to_owned();
+    unsafe {
+        if !MmIsAddressValid(unicode.Buffer as _)
+            || unicode.Length > unicode.MaximumLength
+            || unicode.Length as usize > max_length
+        {
+            return result;
+        }
+        let slice = core::slice::from_raw_parts(unicode.Buffer, unicode.Length as usize / 2);
+        String::from_utf16_lossy(slice)
+    }
 }

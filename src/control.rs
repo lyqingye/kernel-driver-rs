@@ -6,7 +6,7 @@ use winapi::{
     shared::{ntdef::NTSTATUS, ntstatus::STATUS_SUCCESS},
 };
 
-pub extern "system" fn dispatch_device_contole(
+pub extern "system" fn dispatch_device_control(
     _device_object: &mut DEVICE_OBJECT,
     irp: &mut IRP,
 ) -> NTSTATUS {
@@ -27,6 +27,7 @@ pub extern "system" fn dispatch_device_contole(
             output_buffer_length,
         );
     }
+
     let code = unsafe { (*stack).Parameters.DeviceIoControl().IoControlCode };
     let status = STATUS_SUCCESS;
     let information: usize = 0;

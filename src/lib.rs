@@ -23,15 +23,15 @@ use winapi::{
     },
 };
 
-use crate::control::dispatch_device_contole;
+use crate::control::dispatch_device_control;
 use crate::lang::unicode_string;
 use crate::module::enum_modules;
+extern crate alloc;
 
 pub mod control;
 pub mod lang;
 pub mod module;
 pub mod nt;
-
 const DEVICE_NAME: &'static str = "\\Device\\WindowsKernelResearch";
 const SYMBOL_LINK: &'static str = "\\??\\WindowsKernelResearch";
 
@@ -71,7 +71,7 @@ pub extern "system" fn driver_entry(driver: &mut DRIVER_OBJECT, _path: PVOID) ->
     driver.MajorFunction[IRP_MJ::CLOSE as usize] = Some(dispatch_default_routine);
     driver.MajorFunction[IRP_MJ::READ as usize] = Some(dispatch_default_routine);
     driver.MajorFunction[IRP_MJ::WRITE as usize] = Some(dispatch_default_routine);
-    driver.MajorFunction[IRP_MJ::DEVICE_CONTROL as usize] = Some(dispatch_device_contole);
+    driver.MajorFunction[IRP_MJ::DEVICE_CONTROL as usize] = Some(dispatch_device_control);
 
     // create device object & symbol link
     let device_name = unicode_string(obfstr::wide!(DEVICE_NAME));
@@ -98,16 +98,16 @@ pub extern "system" fn driver_entry(driver: &mut DRIVER_OBJECT, _path: PVOID) ->
             return status;
         }
     }
-    unsafe {
-        enum_modules(driver, &mut |module_info| -> bool {
-            log::info!(
-                "{} {:x} {}",
-                module_info.name,
-                module_info.base_address,
-                module_info.full_path
-            );
-            false
-        })
-    };
+
+    enum_modules(driver, &mut |module_info| -> bool {
+        log::info!(
+            "{} {:x} {}",
+            module_info.name,
+            module_info.base_address,
+            module_info.full_path
+        );
+        false
+    });
+
     STATUS_SUCCESS
 }
