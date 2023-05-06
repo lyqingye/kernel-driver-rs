@@ -6,3 +6,13 @@ write windows kernel driver by rust, can use it as template
 - Logging
 - Memory Allocate
 
+# Environment
+- Cargo-Make
+- Visual studio 2019
+
+# Building
+```shell
+cargo make build
+```
+# License
+MIT license
